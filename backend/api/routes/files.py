@@ -7,6 +7,7 @@ from typing import List, Optional
 import os
 import zipfile
 import io
+from urllib.parse import quote
 
 from backend.config import get_settings
 from backend.database import get_db
@@ -220,12 +221,17 @@ async def download_all(
                 zip_file.write(json_path, f"{base_name}.json")
     
     zip_buffer.seek(0)
+    zip_content = zip_buffer.getvalue()
     
-    return StreamingResponse(
-        zip_buffer,
+    # [advice from AI] 한글 파일명 인코딩 (RFC 5987)
+    encoded_filename = quote(f"{base_name}.zip")
+    
+    return Response(
+        content=zip_content,
         media_type="application/zip",
         headers={
-            "Content-Disposition": f"attachment; filename={base_name}.zip"
+            "Content-Disposition": f"attachment; filename*=UTF-8''{encoded_filename}",
+            "Content-Length": str(len(zip_content)),
         },
     )
 
@@ -275,12 +281,14 @@ async def download_batch(
                     zip_file.write(json_path, f"{base_name}.json")
     
     zip_buffer.seek(0)
+    zip_content = zip_buffer.getvalue()
     
-    return StreamingResponse(
-        zip_buffer,
+    return Response(
+        content=zip_content,
         media_type="application/zip",
         headers={
-            "Content-Disposition": "attachment; filename=script2wave_batch.zip"
+            "Content-Disposition": "attachment; filename=script2wave_batch.zip",
+            "Content-Length": str(len(zip_content)),
         },
     )
 
