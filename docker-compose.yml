@@ -1,0 +1,39 @@
+# [advice from AI] 개발 환경용 docker-compose 설정
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: script2wave-app
+    ports:
+      - "0.0.0.0:8000:8000"
+    network_mode: bridge
+    volumes:
+      # 소스 코드 마운트 (핫 리로드용)
+      - .:/app
+      # 업로드/출력 파일 영속화
+      - ./storage/uploads:/app/storage/uploads
+      - ./storage/outputs:/app/storage/outputs
+      - ./storage/temp:/app/storage/temp
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ELEVENLABS_API_KEY=sk_c5390dafcb6dd1441949ca4a967bb38505e65a1e76fed8e7
+      - TTS_MOCK_MODE=false
+      - DEFAULT_TURN_GAP=0.5
+      - DEFAULT_SPEECH_RATE=4.0
+    restart: unless-stopped
+
+  # Redis (배치 작업 큐용 - 추후 활성화)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: script2wave-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+
+# volumes:
+#   redis_data:
+

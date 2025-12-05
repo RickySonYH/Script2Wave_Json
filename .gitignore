@@ -1,0 +1,41 @@
+# [advice from AI] Git 무시 파일 목록
+
+# Environment
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+
+# Storage (업로드/출력 파일은 git에 포함하지 않음)
+storage/uploads/*
+storage/outputs/*
+storage/temp/*
+!storage/uploads/.gitkeep
+!storage/outputs/.gitkeep
+!storage/temp/.gitkeep
+
+# Database
+*.db
+*.sqlite3
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
