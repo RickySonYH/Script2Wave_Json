@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background -->
+  <rect width="64" height="64" rx="12" fill="#1a1a2e"/>
+  
+  <!-- Sound wave -->
+  <g stroke="#4ecca3" stroke-width="3" stroke-linecap="round" fill="none">
+    <path d="M12 32 L12 28 L12 36"/>
+    <path d="M18 32 L18 22 L18 42"/>
+    <path d="M24 32 L24 18 L24 46"/>
+    <path d="M30 32 L30 14 L30 50"/>
+    <path d="M36 32 L36 18 L36 46"/>
+    <path d="M42 32 L42 22 L42 42"/>
+    <path d="M48 32 L48 26 L48 38"/>
+  </g>
+  
+  <!-- Document icon -->
+  <g transform="translate(44, 2) scale(0.35)">
+    <rect x="0" y="0" width="40" height="50" rx="4" fill="#e94560"/>
+    <path d="M8 15 L32 15 M8 25 L28 25 M8 35 L24 35" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>
+

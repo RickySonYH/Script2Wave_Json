@@ -21,23 +21,27 @@
 
 ## 설치 및 실행
 
-### 1. 저장소 클론
+### 방법 1: Windows 설치 프로그램 (권장)
+
+1. [Releases](https://github.com/RickySonYH/Script2Wave_Json/releases)에서 `Script2WAVE-Setup.exe` 다운로드
+2. 설치 프로그램 실행
+3. 바탕화면 또는 시작 메뉴에서 Script2WAVE 실행
+4. 브라우저가 자동으로 `http://localhost:8000` 접속
+
+> Windows 설치 프로그램 빌드 방법: [BUILD_WINDOWS.md](BUILD_WINDOWS.md) 참고
+
+### 방법 2: Docker (개발/서버 환경)
 
 ```bash
+# 저장소 클론
 git clone https://github.com/RickySonYH/Script2Wave_Json.git
 cd Script2Wave_Json
-```
 
-### 2. Docker로 실행
-
-```bash
+# Docker로 실행
 docker-compose up --build -d
-```
 
-### 3. 웹 브라우저에서 접속
-
-```
-http://localhost:8000
+# 브라우저에서 접속
+# http://localhost:8000
 ```
 
 ## 사용법

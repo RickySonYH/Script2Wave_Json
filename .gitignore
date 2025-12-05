@@ -39,3 +39,10 @@ Thumbs.db
 *.log
 logs/
 
+# Build (Windows)
+dist/
+build/ffmpeg/
+build/icon.ico
+*.spec.bak
+venv/
+
