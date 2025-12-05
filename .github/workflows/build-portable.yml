@@ -7,6 +7,10 @@ on:
       - 'v*'  # v1.0.0 같은 태그 푸시 시 실행
   workflow_dispatch:  # 수동 실행 가능
 
+# [advice from AI] Release 생성을 위한 권한 설정
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
