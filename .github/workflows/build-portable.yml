@@ -1,0 +1,100 @@
+# [advice from AI] Windows Portable ZIP 자동 빌드
+name: Build Portable ZIP
+
+on:
+  push:
+    tags:
+      - 'v*'  # v1.0.0 같은 태그 푸시 시 실행
+  workflow_dispatch:  # 수동 실행 가능
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Embedded Python
+        shell: pwsh
+        run: |
+          # Python 3.11 Embedded 다운로드
+          $pythonUrl = "https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip"
+          Invoke-WebRequest -Uri $pythonUrl -OutFile python-embed.zip
+          Expand-Archive -Path python-embed.zip -DestinationPath python
+          
+          # pip 설치를 위해 python311._pth 수정
+          $pthFile = "python/python311._pth"
+          $content = Get-Content $pthFile
+          $content = $content -replace '#import site', 'import site'
+          Set-Content $pthFile $content
+          
+          # get-pip.py 다운로드 및 실행
+          Invoke-WebRequest -Uri "https://bootstrap.pypa.io/get-pip.py" -OutFile get-pip.py
+          ./python/python.exe get-pip.py --no-warn-script-location
+          
+          # 의존성 설치
+          ./python/python.exe -m pip install --no-warn-script-location -r requirements.txt
+
+      - name: Download FFmpeg
+        shell: pwsh
+        run: |
+          # ffmpeg 다운로드
+          $ffmpegUrl = "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip"
+          Invoke-WebRequest -Uri $ffmpegUrl -OutFile ffmpeg.zip
+          Expand-Archive -Path ffmpeg.zip -DestinationPath ffmpeg-temp
+          
+          # ffmpeg 폴더 생성 및 필요한 파일만 복사
+          New-Item -ItemType Directory -Force -Path ffmpeg
+          Copy-Item ffmpeg-temp/ffmpeg-master-latest-win64-gpl/bin/ffmpeg.exe ffmpeg/
+          Copy-Item ffmpeg-temp/ffmpeg-master-latest-win64-gpl/bin/ffprobe.exe ffmpeg/
+
+      - name: Create storage directories
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path storage/uploads
+          New-Item -ItemType Directory -Force -Path storage/outputs
+          # .gitkeep 생성
+          New-Item -ItemType File -Force -Path storage/uploads/.gitkeep
+          New-Item -ItemType File -Force -Path storage/outputs/.gitkeep
+
+      - name: Create Portable ZIP
+        shell: pwsh
+        run: |
+          # 배포에 필요한 파일만 포함
+          $files = @(
+            "backend",
+            "frontend", 
+            "python",
+            "ffmpeg",
+            "storage",
+            "run.bat",
+            "README.md",
+            "LICENSE"
+          )
+          
+          # ZIP 생성
+          $version = if ($env:GITHUB_REF_NAME -match '^v') { $env:GITHUB_REF_NAME } else { "dev" }
+          $zipName = "Script2WAVE-Portable-$version.zip"
+          
+          Compress-Archive -Path $files -DestinationPath $zipName -CompressionLevel Optimal
+          
+          # 출력 변수 설정
+          echo "ZIP_NAME=$zipName" >> $env:GITHUB_ENV
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Script2WAVE-Portable
+          path: ${{ env.ZIP_NAME }}
+          retention-days: 30
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.ZIP_NAME }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

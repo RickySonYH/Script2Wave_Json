@@ -21,14 +21,24 @@
 
 ## 설치 및 실행
 
-### 방법 1: Windows 설치 프로그램 (권장)
+### 방법 1: Windows Portable ZIP (권장)
 
-1. [Releases](https://github.com/RickySonYH/Script2Wave_Json/releases)에서 `Script2WAVE-Setup.exe` 다운로드
-2. 설치 프로그램 실행
-3. 바탕화면 또는 시작 메뉴에서 Script2WAVE 실행
+1. [Releases](https://github.com/RickySonYH/Script2Wave_Json/releases)에서 `Script2WAVE-Portable-vX.X.X.zip` 다운로드
+2. 원하는 위치에 압축 해제
+3. `run.bat` 더블클릭
 4. 브라우저가 자동으로 `http://localhost:8000` 접속
 
-> Windows 설치 프로그램 빌드 방법: [BUILD_WINDOWS.md](BUILD_WINDOWS.md) 참고
+```
+Script2WAVE-Portable/
+├── run.bat          ← 더블클릭으로 실행!
+├── python/          ← Python 내장 (설치 불필요)
+├── ffmpeg/          ← ffmpeg 내장
+├── backend/
+├── frontend/
+└── storage/         ← 데이터 저장
+```
+
+> 종료: 콘솔 창을 닫거나 `Ctrl+C`
 
 ### 방법 2: Docker (개발/서버 환경)
 
