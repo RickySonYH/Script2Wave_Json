@@ -19,8 +19,8 @@ services:
       - ./storage/temp:/app/storage/temp
     environment:
       - PYTHONUNBUFFERED=1
-      - ELEVENLABS_API_KEY=sk_c5390dafcb6dd1441949ca4a967bb38505e65a1e76fed8e7
-      - TTS_MOCK_MODE=false
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY:-}
+      - TTS_MOCK_MODE=${TTS_MOCK_MODE:-false}
       - DEFAULT_TURN_GAP=0.5
       - DEFAULT_SPEECH_RATE=4.0
     restart: unless-stopped
